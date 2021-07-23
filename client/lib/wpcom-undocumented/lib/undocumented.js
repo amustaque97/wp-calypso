@@ -1806,6 +1806,18 @@ Undocumented.prototype.addVipDomainMapping = function ( siteId, domainName, fn )
 	);
 };
 
+/**
+ * Checks the mapping status of the given domain.
+ *
+ * @param {string} [domainName] Name of the domain to check
+ * @param {Function} fn The callback function
+ * @returns {Promise} A promise that resolves when the request is complete
+ */
+Undocumented.prototype.getMappingStatus = function ( domainName, fn ) {
+	debug( '/domains/:domainName/mapping_status' );
+	return this.wpcom.req.get( `/domains/${ domainName }/mapping_status`, fn );
+};
+
 /*
  * Change the theme of a given site.
  *

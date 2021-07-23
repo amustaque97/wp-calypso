@@ -230,6 +230,7 @@ export class MapDomain extends Component {
 				{ errorMessage && <Notice status="is-error" text={ errorMessage } showDismiss={ false } /> }
 
 				<MapDomainStep
+					domain={ initialQuery }
 					domainsWithPlansOnly={ domainsWithPlansOnly }
 					initialQuery={ initialQuery }
 					isBusyMapping={ this.state.isBusyMapping }
