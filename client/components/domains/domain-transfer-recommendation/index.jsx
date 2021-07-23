@@ -19,20 +19,20 @@ import './style.scss';
 
 export default function DomainTransferRecommendation() {
 	return (
-		<Card className="map-domain-step__transfer-recommendation">
-			<div className="map-domain-step__transfer-recommendation-content">
+		<Card className="domain-transfer-recommendation">
+			<div className="domain-transfer-recommendation__content">
 				<CardHeading size={ 16 }>
 					{ __( 'Transfer your domain' ) }
 					<Badge type="info-green">{ __( 'Recommended' ) }</Badge>
 				</CardHeading>
-				<span className="map-domain-step__transfer-recommendation-message">
+				<span className="domain-transfer-recommendation__message">
 					{ __(
 						'We recommend transferring your domain to manage your domain and site directly on WordPress.com'
 					) }
 				</span>
 			</div>
 			<Button
-				className="map-domain-step__transfer-recommendation-action"
+				className="domain-transfer-recommendation__action"
 				href={ INCOMING_DOMAIN_TRANSFER }
 			>
 				{ __( 'Transfer instead' ) }

@@ -1,0 +1,34 @@
+.domain-transfer-recommendation {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+	.card-heading {
+		font-weight: 600;
+	}
+
+	.badge {
+		margin-left: 0.8em;
+		border-radius: 4px; /* stylelint-disable-line */
+		font-size: $font-body-extra-small;
+		font-weight: 500; /* stylelint-disable-line */
+	}
+
+	.domain-transfer-recommendation__message {
+		font-size: $font-body-small;
+	}
+
+	.domain-transfer-recommendation__content {
+		flex-grow: 1;
+	}
+
+	.domain-transfer-recommendation__action {
+		flex-grow: 0;
+	}
+}
+
+.domain-transfer-recommendation__message {
+	color: var( --studio-gray-60 );
+	max-width: 660px;
+}

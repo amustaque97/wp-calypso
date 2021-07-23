@@ -1,188 +1,89 @@
-@import '@automattic/typography/styles/variables';
-@import '@wordpress/base-styles/breakpoints';
-@import '@wordpress/base-styles/mixins';
-
 .map-domain-step {
-	.map-domain-step__heading {
-		font-size: $font-title-medium;
-		font-weight: 500; /* stylelint-disable-line */
-		margin-bottom: 18px;
+	padding: 0;
+
+	form.map-domain-step__form {
+		padding: 20px;
+		margin-bottom: 9px;
 	}
 
-	.map-domain-step__sub-heading {
-		font-size: $font-title-small;
-		font-weight: 500; /* stylelint-disable-line */
+	.domain-product-price {
+		float: left;
+		line-height: inherit;
+		margin: 10px 0;
+		min-width: 0;
+		padding-right: 0;
 
-		.gridicon {
-			position: relative;
-			bottom: -5px;
-			margin-right: 8px;
-		}
-	}
-
-	.map-domain-step__change_mode_link {
-		cursor: pointer;
-	}
-
-	.map-domain-step__action-button {
-		margin-top: 32px;
-	}
-
-	.map-domain-step__text:last-of-type {
-		margin-bottom: 32px;
-	}
-
-	.map-domain-step__suggested-login {
-		.map-domain-step__actions {
-			.button + .button {
-				margin-left: 16px;
-			}
-		}
-	}
-
-	.map-domain-step__name-server-list {
-		margin-bottom: 32px;
-	}
-
-	.map-domain-step__clipboard-button {
-		display: flex;
-		align-items: center;
-		width: 314px;
-		justify-content: space-between;
-		background-color: var( --studio-gray-0 );
-		padding: 8px;
-		max-height: 40px;
-
-		&:hover {
-			background-color: var( --studio-gray-0 );
-
-			.map-domain-step__clipboard-button-blue {
-				color: var( --studio-blue-70 );
-			}
+		@include breakpoint-deprecated( '<660px' ) {
+			padding-bottom: 5px;
 		}
 
-		& + .map-domain-step__clipboard-button {
-			margin-top: 8px;
-		}
-
-		.map-domain-step__clipboard-button-blue {
-			color: var( --studio-blue-50 );
-		}
-
-		.map-domain-step__clipboard-button-text {
-			font-size: $font-body;
-			line-height: 24px;
-		}
-
-		.map-domain-step__clipboard-button-state {
-			display:flex;
-			align-items: center;
-
-			.gridicon {
-				margin-right: 4px;
-				height: 20px;
-				width: 20px;
-				top: 1px;
-			}
-
-			.map-domain-step__clipboard-button-text {
-				font-size: $font-body-small;
-				font-weight: 600;
-				line-height: 20px;
-			}
-		}
-	}
-}
-
-.map-domain-step__transfer-recommendation {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-
-	.card-heading {
-		font-weight: 600;
-	}
-
-	.badge {
-		margin-left: 0.8em;
-		border-radius: 4px; /* stylelint-disable-line */
-		font-size: $font-body-extra-small;
-		font-weight: 500; /* stylelint-disable-line */
-	}
-
-	.map-domain-step__transfer-recommendation-message {
-		font-size: $font-body-small;
-	}
-
-	.map-domain-step__transfer-recommendation-content {
-		flex-grow: 1;
-	}
-
-	.map-domain-step__transfer-recommendation-action {
-		flex-grow: 0;
-	}
-}
-
-.map-domain-step__text,
-.map-domain-step__transfer-recommendation-message {
-	color: var( --studio-gray-60 );
-	max-width: 660px;
-}
-
-.map-domain-step__support-documentation {
-	font-size: $font-body-small;
-
-	.gridicon {
-		position: relative;
-		bottom: -3px;
-	}
-
-	//@include break-mobile {
-	//	padding: 0 16px;
-	//}
-}
-
-.map-domain-steps-progress {
-	margin-bottom: 26px;
-
-	.map-domain-steps-progress__number {
-		border: 1px solid #dcdcde;
-		height: 24px;
-		width: 24px;
-		display: inline-block;
-		text-align: center;
-		border-radius: 12px; /* stylelint-disable-line */
-
-		&.current-step {
-			background-color: var( --studio-blue-50 );
-		}
-
-		&.completed-step {
-			background-color: var( --studio-green-50 );
-		}
-
-		&.current-step,
-		&.completed-step {
-			border: none;
-			color: #ffffff;
-		}
-
-		.gridicon {
+		@include breakpoint-deprecated( '>960px' ) {
+			float: right;
 			margin: 0;
 		}
 	}
 
-	.map-domain-steps-progress__step-name {
-		font-size: $font-body-small;
-		font-weight: 500; /* stylelint-disable-line */
-		margin-left: 8px;
+	.notice {
+		margin-top: 25px;
 	}
 
-	.gridicon {
-		margin: 0 16px;
-		position: relative;
-		bottom: -3px;
-		fill: #dcdcde;
+	.domain-search-results__domain-availability,
+	.map-domain-step__domain-availability {
+		margin-top: 30px;
+	}
+
+	.domain-suggestion.card {
+		border-left: 3px solid var( --color-success );
+	}
+}
+
+.map-domain-step__domain-heading {
+	font-size: 1em;
+	font-weight: 600;
+
+	@include breakpoint-deprecated( '>960px' ) {
+		max-width: 75%;
+		float: left;
+		margin-bottom: 20px;
+	}
+}
+
+.map-domain-step__add-domain {
+	display: flex;
+	flex-flow: column;
+	width: 100%;
+
+	@include breakpoint-deprecated( '>660px' ) {
+		flex-flow: row;
+	}
+}
+
+.map-domain-step__domain-text {
+	font-size: 0.9em;
+	margin-top: 20px;
+}
+
+.map-domain-step__add-domain .form-text-input-with-affixes__prefix {
+	flex: inherit;
+}
+
+input[type='text'].form-text-input.map-domain-step__external-domain {
+	flex-grow: 1;
+	width: auto;
+}
+
+.map-domain-step__domain-text {
+	font-size: 0.9em;
+	margin-top: 20px;
+}
+
+.map-domain-step__go {
+	flex-grow: 1;
+	margin: 10px 0 0;
+
+	@include breakpoint-deprecated( '>660px' ) {
+		min-width: 80px;
+		flex-grow: 0;
+		margin: 0 0 0 10px;
 	}
 }

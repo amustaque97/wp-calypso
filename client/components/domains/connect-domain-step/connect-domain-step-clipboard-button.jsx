@@ -17,20 +17,20 @@ import Gridicon from 'calypso/components/gridicon';
  */
 import './style.scss';
 
-export default function MapDomainStepsClipboardButton( { text } ) {
+export default function ConnectDomainStepClipboardButton( { text } ) {
 	const [ copiedText, setCopiedText ] = useState( false );
 	const copied = () => setCopiedText( true );
-	const stateClasses = classNames( 'map-domain-step__clipboard-button-state', {
-		'map-domain-step__clipboard-button-blue': ! copiedText,
+	const stateClasses = classNames( 'connect-domain-step__clipboard-button-state', {
+		'connect-domain-step__clipboard-button-blue': ! copiedText,
 	} );
 	const dataClasses = classNames(
-		'map-domain-step__clipboard-button-data',
-		'map-domain-step__clipboard-button-text'
+		'connect-domain-step__clipboard-button-data',
+		'connect-domain-step__clipboard-button-text'
 	);
 
 	return (
 		<ClipboardButton
-			className="map-domain-step__clipboard-button"
+			className="connect-domain-step__clipboard-button"
 			text={ text }
 			onCopy={ copied }
 			borderless
@@ -39,7 +39,7 @@ export default function MapDomainStepsClipboardButton( { text } ) {
 			<div className={ stateClasses }>
 				{ /* eslint-disable-next-line wpcalypso/jsx-gridicon-size */ }
 				<Gridicon icon="next-page" size={ 20 } />
-				<span className="map-domain-step__clipboard-button-text">
+				<span className="connect-domain-step__clipboard-button-text">
 					{ copiedText ? __( 'Copied!' ) : __( 'Copy' ) }
 				</span>
 			</div>
@@ -47,6 +47,6 @@ export default function MapDomainStepsClipboardButton( { text } ) {
 	);
 }
 
-MapDomainStepsClipboardButton.propTypes = {
+ConnectDomainStepClipboardButton.propTypes = {
 	text: PropTypes.string.isRequired,
 };

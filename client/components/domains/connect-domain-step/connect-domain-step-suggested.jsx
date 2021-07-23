@@ -9,12 +9,12 @@ import { Card } from '@automattic/components';
 /**
  * Internal dependencies
  */
-import { stepType } from './constants';
+import { modeType, stepType } from './constants';
 import CardHeading from 'calypso/components/card-heading';
-import MapDomainStepSuggestedStart from './map-domain-steps-suggested-start';
-import MapDomainStepSuggestedLogin from './map-domain-steps-suggested-login';
-import MapDomainStepSuggestedNameServers from './map-domain-steps-suggested-name-servers';
-import MapDomainStepsProgress from './map-domain-steps-progress';
+import ConnectDomainStepSuggestedStart from './connect-domain-step-suggested-start';
+import ConnectDomainStepSuggestedLogin from './connect-domain-step-suggested-login';
+import ConnectDomainStepSuggestedNameServers from './connect-domain-step-suggested-name-servers';
+import ConnectDomainStepProgress from './connect-domain-step-progress';
 
 /**
  * Style dependencies
@@ -22,9 +22,9 @@ import MapDomainStepsProgress from './map-domain-steps-progress';
 import './style.scss';
 
 const stepContent = {
-	[ stepType.START ]: MapDomainStepSuggestedStart,
-	[ stepType.LOG_IN_TO_PROVIDER ]: MapDomainStepSuggestedLogin,
-	[ stepType.UPDATE_NAME_SERVERS ]: MapDomainStepSuggestedNameServers,
+	[ stepType.START ]: ConnectDomainStepSuggestedStart,
+	[ stepType.LOG_IN_TO_PROVIDER ]: ConnectDomainStepSuggestedLogin,
+	[ stepType.UPDATE_NAME_SERVERS ]: ConnectDomainStepSuggestedNameServers,
 };
 
 const progressStepList = {
@@ -32,10 +32,11 @@ const progressStepList = {
 	[ stepType.UPDATE_NAME_SERVERS ]: __( 'Update name servers' ),
 };
 
-export default function MapDomainStepsSuggested( {
+export default function ConnectDomainStepSuggested( {
 	className,
 	domain,
 	step,
+	mode,
 	onChangeStep,
 	onChangeMode,
 	onVerifyConnection,
@@ -43,15 +44,18 @@ export default function MapDomainStepsSuggested( {
 	verificationStatus,
 } ) {
 	const StepContent = stepContent[ step ];
-	const StepsProgress = <MapDomainStepsProgress steps={ progressStepList } currentStep={ step } />;
+	const StepsProgress = <ConnectDomainStepProgress steps={ progressStepList } currentStep={ step } />;
 	const showProgress = Object.keys( progressStepList ).includes( step );
 
 	return (
 		<Card className={ className }>
-			<CardHeading className="map-domain-step__heading">{ __( 'Suggested setup' ) }</CardHeading>
+			<CardHeading className="connect-domain-step__heading">
+				{ __( 'Suggested setup' ) }
+			</CardHeading>
 			{ showProgress && StepsProgress }
 			<StepContent
 				domain={ domain }
+				mode={ mode }
 				onChangeMode={ onChangeMode }
 				onChangeStep={ onChangeStep }
 				stepProgress={ showProgress && StepsProgress }
@@ -63,10 +67,11 @@ export default function MapDomainStepsSuggested( {
 	);
 }
 
-MapDomainStepsSuggested.propTypes = {
+ConnectDomainStepSuggested.propTypes = {
 	className: PropTypes.string,
 	domain: PropTypes.string.isRequired,
 	step: PropTypes.oneOf( Object.values( stepType ) ).isRequired,
+	mode: PropTypes.oneOf( Object.values( modeType ) ).isRequired,
 	onChangeStep: PropTypes.func.isRequired,
 	onChangeMode: PropTypes.func.isRequired,
 	onVerifyConnection: PropTypes.func.isRequired,

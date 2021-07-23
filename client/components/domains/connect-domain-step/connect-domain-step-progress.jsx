@@ -15,11 +15,11 @@ import Gridicon from 'calypso/components/gridicon';
  */
 import './style.scss';
 
-export default function MapDomainStepsProgress( { steps, currentStep } ) {
+export default function ConnectDomainStepProgress( { steps, currentStep } ) {
 	let currentStepNumber = 0;
 
 	return (
-		<div className="map-domain-steps-progress">
+		<div className="connect-domain-step__progress">
 			{ Object.values( steps )
 				.map( ( stepName, index ) => {
 					const stepNumber = index + 1;
@@ -29,7 +29,7 @@ export default function MapDomainStepsProgress( { steps, currentStep } ) {
 
 					const stepCompleted = 0 === currentStepNumber || currentStepNumber > stepNumber;
 
-					const stepNumberClasses = classNames( 'map-domain-steps-progress__number', {
+					const stepNumberClasses = classNames( 'connect-domain-step__progress-number', {
 						'current-step': currentStepNumber === stepNumber,
 						'completed-step': stepCompleted,
 					} );
@@ -43,7 +43,7 @@ export default function MapDomainStepsProgress( { steps, currentStep } ) {
 					return (
 						<React.Fragment key={ 'step-' + stepNumber }>
 							<span className={ stepNumberClasses }>{ stepNumberContent }</span>
-							<span className="map-domain-steps-progress__step-name">{ stepName }</span>
+							<span className="connect-domain-step__progress-step-name">{ stepName }</span>
 						</React.Fragment>
 					);
 				} )
@@ -52,6 +52,7 @@ export default function MapDomainStepsProgress( { steps, currentStep } ) {
 						? [ element ]
 						: [
 								...list,
+								// eslint-disable-next-line wpcalypso/jsx-gridicon-size
 								<Gridicon key={ 'icon-' + index } icon="chevron-right" size={ 20 } />,
 								element,
 						  ];
@@ -60,7 +61,7 @@ export default function MapDomainStepsProgress( { steps, currentStep } ) {
 	);
 }
 
-MapDomainStepsProgress.propTypes = {
+ConnectDomainStepProgress.propTypes = {
 	steps: PropTypes.object.isRequired,
 	currentStep: PropTypes.string.isRequired,
 };

@@ -32,6 +32,7 @@ import { getProductsList } from 'calypso/state/products-list/selectors';
 import TrademarkClaimsNotice from 'calypso/components/domains/trademark-claims-notice';
 import { fillInSingleCartItemAttributes } from 'calypso/lib/cart-values';
 import { successNotice } from 'calypso/state/notices/actions';
+import ConnectDomainStep from 'calypso/components/domains/connect-domain-step';
 
 const wpcom = wp.undocumented();
 
@@ -229,17 +230,19 @@ export class MapDomain extends Component {
 
 				{ errorMessage && <Notice status="is-error" text={ errorMessage } showDismiss={ false } /> }
 
-				<MapDomainStep
-					domain={ initialQuery }
-					domainsWithPlansOnly={ domainsWithPlansOnly }
-					initialQuery={ initialQuery }
-					isBusyMapping={ this.state.isBusyMapping }
-					products={ productsList }
-					selectedSite={ selectedSite }
-					onRegisterDomain={ this.handleRegisterDomain }
-					onMapDomain={ this.handleMapDomain }
-					analyticsSection="domains"
-				/>
+				<ConnectDomainStep domain={ initialQuery } />
+
+				{ /*<MapDomainStep*/ }
+				{ /*	domain={ initialQuery }*/ }
+				{ /*	domainsWithPlansOnly={ domainsWithPlansOnly }*/ }
+				{ /*	initialQuery={ initialQuery }*/ }
+				{ /*	isBusyMapping={ this.state.isBusyMapping }*/ }
+				{ /*	products={ productsList }*/ }
+				{ /*	selectedSite={ selectedSite }*/ }
+				{ /*	onRegisterDomain={ this.handleRegisterDomain }*/ }
+				{ /*	onMapDomain={ this.handleMapDomain }*/ }
+				{ /*	analyticsSection="domains"*/ }
+				{ /*/>*/ }
 			</span>
 		);
 	}

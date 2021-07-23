@@ -19,30 +19,30 @@ import { Gridicon } from 'calypso/devdocs/design/playground-scope';
  */
 import './style.scss';
 
-export default function MapDomainStepSuggestedStart( { onChangeMode, onChangeStep } ) {
+export default function ConnectDomainStepSuggestedStart( { onChangeMode, onChangeStep } ) {
 	const setModeSuggested = () => onChangeMode( modeType.A_RECORDS );
 	const setStepLogin = () => onChangeStep( stepType.LOG_IN_TO_PROVIDER );
 
 	return (
-		<div className="map-domain-step__suggested-start">
-			<p className="map-domain-step__text">
+		<div className="connect-domain-step__suggested-start">
+			<p className="connect-domain-step__text">
 				{ createInterpolateElement(
 					__(
 						'This is the easiest way to connect your domain, using name servers. If needed you can also use our <a>advanced setup</a>, using root A & CNAME records.'
 					),
 					{
 						a: createElement( 'a', {
-							className: 'map-domain-step__change_mode_link',
+							className: 'connect-domain-step__change_mode_link',
 							onClick: setModeSuggested,
 						} ),
 					}
 				) }
 			</p>
-			<CardHeading className="map-domain-step__sub-heading">
+			<CardHeading className="connect-domain-step__sub-heading">
 				<Gridicon size={ 24 } icon="time" />
 				{ __( 'How long will it take?' ) }
 			</CardHeading>
-			<p className="map-domain-step__text">
+			<p className="connect-domain-step__text">
 				{ __( 'It takes 5-15 mintues to set up.' ) }
 				<br />
 				{ __( 'It can take up to 72 hours for the domain to be fully connected.' ) }
@@ -54,7 +54,7 @@ export default function MapDomainStepSuggestedStart( { onChangeMode, onChangeSte
 	);
 }
 
-MapDomainStepSuggestedStart.propTypes = {
+ConnectDomainStepSuggestedStart.propTypes = {
 	onChangeStep: PropTypes.func.isRequired,
 	onChangeMode: PropTypes.func.isRequired,
 };

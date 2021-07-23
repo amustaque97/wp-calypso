@@ -17,12 +17,12 @@ import { stepType } from './constants';
  */
 import './style.scss';
 
-export default function MapDomainStepSuggestedLogin( { domain, onChangeStep } ) {
+export default function ConnectDomainStepSuggestedLogin( { domain, onChangeStep } ) {
 	const setStepUpdateDns = () => onChangeStep( stepType.UPDATE_NAME_SERVERS );
 
 	return (
-		<div className="map-domain-step__suggested-login">
-			<p className="map-domain-step__text">
+		<div className="connect-domain-step__suggested-login">
+			<p className="connect-domain-step__text">
 				{ createInterpolateElement(
 					__(
 						'Log into your domain provider account (like GoDaddy, NameCheap, 1&1, etc.) If you can’t remember who this is: go to <a>this link</a>, enter your domain and look at <em>Reseller Information</em> or <em>Registrar</em> to see the name of your provider.'
@@ -33,7 +33,7 @@ export default function MapDomainStepSuggestedLogin( { domain, onChangeStep } ) 
 					}
 				) }
 			</p>
-			<p className="map-domain-step__text">
+			<p className="connect-domain-step__text">
 				{ sprintf(
 					/* translators: %s: the domain name that the user is connecting to WordPress.com (ex.: example.com) */
 					__(
@@ -49,7 +49,7 @@ export default function MapDomainStepSuggestedLogin( { domain, onChangeStep } ) 
 	);
 }
 
-MapDomainStepSuggestedLogin.propTypes = {
+ConnectDomainStepSuggestedLogin.propTypes = {
 	domain: PropTypes.string.isRequired,
 	onChangeStep: PropTypes.func.isRequired,
 };
