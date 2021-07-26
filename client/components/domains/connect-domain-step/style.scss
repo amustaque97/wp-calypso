@@ -94,6 +94,11 @@
 	}
 }
 
+button.action_buttons__button.action-buttons__back.connect-domain-step__go-back {
+	margin-bottom: 18px;
+	text-decoration: none;
+}
+
 .connect-domain-step__connected {
 	display: flex;
 	flex-direction: column;

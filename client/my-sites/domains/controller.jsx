@@ -30,6 +30,7 @@ import {
 	domainManagementTransferIn,
 	domainManagementTransferInPrecheck,
 	domainMapping,
+	domainMappingSetup,
 	domainTransferIn,
 	domainUseYourDomain,
 } from 'calypso/my-sites/domains/paths';
@@ -39,6 +40,7 @@ import { makeLayout, render as clientRender } from 'calypso/controller';
 import PageViewTracker from 'calypso/lib/analytics/page-view-tracker';
 import canUserPurchaseGSuite from 'calypso/state/selectors/can-user-purchase-gsuite';
 import CalypsoShoppingCartProvider from 'calypso/my-sites/checkout/calypso-shopping-cart-provider';
+import ConnectDomainStep from 'calypso/components/domains/connect-domain-step';
 
 const noop = () => {};
 const domainsAddHeader = ( context, next ) => {
@@ -104,6 +106,22 @@ const mapDomain = ( context, next ) => {
 			<DocumentHead title={ translate( 'Map a Domain' ) } />
 			<CalypsoShoppingCartProvider>
 				<MapDomain initialQuery={ context.query.initialQuery } />
+			</CalypsoShoppingCartProvider>
+		</Main>
+	);
+	next();
+};
+
+const mapDomainSetup = ( context, next ) => {
+	context.primary = (
+		<Main wideLayout>
+			<PageViewTracker
+				path={ domainMappingSetup( ':site', ':domain' ) }
+				title="Domain Search > Connect A Domain > Domain Connection Setup"
+			/>
+			<DocumentHead title={ translate( 'Connect a Domain Setup' ) } />
+			<CalypsoShoppingCartProvider>
+				<ConnectDomainStep domain={ context.params.domain } />
 			</CalypsoShoppingCartProvider>
 		</Main>
 	);
@@ -281,6 +299,7 @@ export default {
 	jetpackNoDomainsWarning,
 	siteRedirect,
 	mapDomain,
+	mapDomainSetup,
 	googleAppsWithRegistration,
 	redirectToDomainSearchSuggestion,
 	redirectIfNoSite,

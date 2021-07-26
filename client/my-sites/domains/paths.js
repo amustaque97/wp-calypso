@@ -170,6 +170,10 @@ export function domainMapping( siteName, domain = '' ) {
 	return path;
 }
 
+export function domainMappingSetup( siteName, domainName ) {
+	return domainMapping( siteName ) + `/setup/${ domainName }`;
+}
+
 /**
  * Return the path to start an inbound domain transfer to WordPress.com.
  *

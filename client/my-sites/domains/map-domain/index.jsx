@@ -13,7 +13,6 @@ import { withShoppingCart } from '@automattic/shopping-cart';
  * Internal dependencies
  */
 import HeaderCake from 'calypso/components/header-cake';
-import MapDomainStep from 'calypso/components/domains/map-domain-step';
 import { DOMAINS_WITH_PLANS_ONLY } from 'calypso/state/current-user/constants';
 import { domainRegistration } from 'calypso/lib/cart-values/cart-items';
 import wp from 'calypso/lib/wp';
