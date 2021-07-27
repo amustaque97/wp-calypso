@@ -324,28 +324,33 @@ $image-height: 47px;
 	}
 
 	.login .button.is-primary {
-		// Match primary button color in Gutenboarding and
-		// change border color to remove 3D effect
-		background-color: #007cba;
-		border-color: #007cba;
-		color: #fff;
+		// Note: Matches primary button to `button.signup-form__submit`
+		background-color: #117ac9;
+		border-color: #0e64a5;
+		color: var( --color-text-inverted );
+		font-weight: 500; /* stylelint-disable-line */
+		box-shadow: none;
+		border: 0;
+		font-weight: 500; /* stylelint-disable-line */
+		letter-spacing: 0.32px;
+		line-height: 17px;
 		min-width: 100%;
 		text-align: center;
-		display: block;
 		margin: 13px auto;
 		float: none;
-		font-weight: 600;
-		letter-spacing: 0;
-		transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
-		box-shadow: none;
 
 		&:hover,
-		&:active {
-			background: var( --studio-blue-20 );
-			border-color: var( --studio-blue-20 );
-			color: #fff;
-			outline-color: transparent;
-			box-shadow: none;
+		&:focus {
+			background-color: #0e64a5;
+			border-color: #0e64a5;
+			color: var( --color-text-inverted );
+		}
+
+		&[disabled],
+		&:disabled,
+		&.disabled {
+			background-color: var( --studio-gray-20 );
+			color: var( --color-surface );
 		}
 
 		@include break-mobile {
@@ -355,17 +360,18 @@ $image-height: 47px;
 
 	.login__form input,
 	.login__form button,
+	.wp-login__links > a {
+		/* Note: Same as `button.signup-form__submit` */
+		height: 44px;
+	}
+
+	.login__form input,
+	.login__form button,
 	.wp-login__links > a:first-of-type {
 		/* Note: Same as `button.signup-form__submit, .signup-form__input.form-text-input` */
 		border-radius: 4px; /* stylelint-disable-line */
 		border: 1px solid var( --studio-gray-10 );
 		font-size: $font-body-small;
-	}
-
-	.login__form input,
-	.login__form button,
-	.wp-login__links > a {
-		height: 44px;
 	}
 
 	.wp-login__links > a {
@@ -399,13 +405,19 @@ $image-height: 47px;
 		padding-top: 10%;
 
 		/* START - Note: Patches below needed to continue using the current Divider in the form for both reskin and old versions.
-		We can remove when we refactor the Divider itself (or rethink current usage), and leave the default card styles intact. */
+		We can remove when we refactor the Divider itself (or rethink current usage), and leave the default card styles intact.
+		Ideally, the Divider used in Login should be consolidated with the inline Separator's styles used in Signup (see `.signup-form__separator`) */
 		padding-left: 20px;
 		padding-right: 20px;
 		form {
-			.login__divider {
-				padding-left: 23px;
-				padding-right: 23px;
+			.login__divider span {
+				/* Note: Same as `.signup-form__separator-text` */
+				background: var( --studio-white );
+				text-transform: uppercase;
+				text-align: center;
+				padding: 0 24px;
+				font-size: 0.75rem;
+				color: var( --studio-gray-50 );
 			}
 
 			.card {
@@ -414,7 +426,7 @@ $image-height: 47px;
 			}
 
 			.card.login__social {
-				border-top: 1px solid var( --studio-gray-10 );
+				border-top: 1px solid #eaeaeb; // same as `.signup-form__separator::before`
 				padding-top: 30px;
 			}
 		}
