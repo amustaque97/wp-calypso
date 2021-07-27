@@ -359,20 +359,48 @@ $image-height: 47px;
 	}
 
 	.login__form input,
-	.login__form button,
-	.wp-login__links > a {
+	.login__form button {
 		/* Note: Same as `button.signup-form__submit` */
 		height: 44px;
 	}
 
 	.login__form input,
-	.login__form button,
-	.wp-login__links > a:first-of-type {
+	.login__form button {
 		/* Note: Same as `button.signup-form__submit, .signup-form__input.form-text-input` */
 		border-radius: 4px; /* stylelint-disable-line */
 		border: 1px solid var( --studio-gray-10 );
 		font-size: $font-body-small;
 	}
+
+	.wp-login__links > a:first-of-type {
+		/* Note: Matches secondary button used in /start (signup). Should probably turn this into a button. */
+		background: transparent;
+		margin: 0;
+		outline: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-decoration: none;
+		box-sizing: border-box;
+		font-size: 14px; /* stylelint-disable-line */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background-color: var( --color-surface );
+		color: var( --color-neutral-70 );
+		border: 1px solid var( --color-neutral-10 );
+		border-radius: 4px; /* stylelint-disable-line */
+		letter-spacing: 0.32px;
+		line-height: 17px;
+		height: 44px;
+		box-shadow: 0 1px 2px rgb( 0 0 0 / 5% );
+
+		&:hover,
+		&:focus {
+			border-color: var( --color-neutral-20 );
+			color: var( --color-neutral-70 );
+		}
+	}
+
 
 	.wp-login__links > a {
 		display: flex;
