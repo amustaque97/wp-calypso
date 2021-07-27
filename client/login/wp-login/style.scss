@@ -304,7 +304,7 @@ $image-height: 47px;
 }
 
 .layout.is-white-login {
-	background-color: #fff;
+	background-color: #fdfdfd;
 
 	.login__form-header {
 		@include onboarding-heading-text-mobile;
@@ -393,7 +393,7 @@ $image-height: 47px;
 
 	.wp-login__links,
 	form {
-		max-width: 440px;
+		max-width: 400px;
 		margin: 0 auto;
 	}
 
@@ -402,7 +402,7 @@ $image-height: 47px;
 	}
 
 	.layout__primary {
-		padding-top: 10%;
+		margin-top: 88px;
 
 		/* START - Note: Patches below needed to continue using the current Divider in the form for both reskin and old versions.
 		We can remove when we refactor the Divider itself (or rethink current usage), and leave the default card styles intact.
@@ -467,12 +467,15 @@ $image-height: 47px;
 	}
 
 	.two-factor-authentication__verification-code-form > p,
-	.login__form .login__form-userdata label,
 	.login__form-terms,
 	.login__social-tos,
 	.login__form-terms a,
 	.login__social-tos a {
-		color: var( --studio-gray-40 );
+		color: var( --studio-gray-50 );
+	}
+
+	.login__form .login__form-userdata label {
+		color: var( --studio-gray-60 );
 	}
 
 	.login__form-terms {
