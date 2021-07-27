@@ -372,6 +372,10 @@ $image-height: 47px;
 		font-size: $font-body-small;
 	}
 
+	.login__form .login__form-userdata input {
+		margin: 0;
+	}
+
 	.wp-login__links > a:first-of-type {
 		/* Note: Matches secondary button used in /start (signup). Should probably turn this into a button. */
 		background: transparent;
