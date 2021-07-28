@@ -321,6 +321,7 @@ $image-height: 47px;
 
 	.wp-login__container .card {
 		box-shadow: none;
+		background-color: #fdfdfd;
 	}
 
 	.login .button.is-primary {
@@ -360,16 +361,25 @@ $image-height: 47px;
 
 	.login__form input,
 	.login__form button {
-		/* Note: Same as `button.signup-form__submit` */
-		height: 44px;
-	}
-
-	.login__form input,
-	.login__form button {
 		/* Note: Same as `button.signup-form__submit, .signup-form__input.form-text-input` */
+		height: 44px;
 		border-radius: 4px; /* stylelint-disable-line */
 		border: 1px solid var( --studio-gray-10 );
 		font-size: $font-body-small;
+
+		&[disabled],
+		&:disabled,
+		&.disabled {
+			background-color: #fdfdfd;
+		}
+	}
+
+	.login__social-buttons button {
+		&[disabled],
+		&:disabled,
+		&.disabled {
+			background-color: #fdfdfd;
+		}
 	}
 
 	.login__form .login__form-userdata input {
@@ -444,7 +454,7 @@ $image-height: 47px;
 		form {
 			.login__divider span {
 				/* Note: Same as `.signup-form__separator-text` */
-				background: var( --studio-white );
+				background: #fdfdfd;
 				text-transform: uppercase;
 				text-align: center;
 				padding: 0 24px;
