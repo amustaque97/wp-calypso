@@ -359,33 +359,34 @@ $image-height: 47px;
 		}
 	}
 
-	.login__form input,
-	.login__form button {
-		/* Note: Same as `button.signup-form__submit, .signup-form__input.form-text-input` */
-		height: 44px;
-		border-radius: 4px; /* stylelint-disable-line */
-		border: 1px solid var( --studio-gray-10 );
-		font-size: $font-body-small;
+	.login form {
+		input,
+		button {
+			/* Note: Same as `button.signup-form__submit, .signup-form__input.form-text-input` */
+			height: 44px;
+			border-radius: 4px; /* stylelint-disable-line */
+			border: 1px solid var( --studio-gray-10 );
+			font-size: $font-body-small;
 
-		&[disabled],
-		&:disabled,
-		&.disabled {
-			background-color: #fdfdfd;
+			&[disabled],
+			&:disabled,
+			&.disabled {
+				background-color: #fdfdfd;
+			}
 		}
-	}
 
-	.login__social-buttons button {
-		background-color: #fdfdfd;
-
-		&[disabled],
-		&:disabled,
-		&.disabled {
-			background-color: #fdfdfd;
+		.login__form-userdata input {
+			margin: 0 0 20px;
 		}
-	}
 
-	.login__form .login__form-userdata input {
-		margin: 0;
+		.login__form-userdata,
+		.login__social-buttons {
+			button {
+				background-color: #fdfdfd;
+				border: 0;
+				height: unset;
+			}
+		}
 	}
 
 	.wp-login__links > a:first-of-type {
@@ -533,10 +534,6 @@ $image-height: 47px;
 		a {
 			text-decoration: underline;
 		}
-	}
-
-	.login__form-terms {
-		margin-top: 16px;
 	}
 
 	.login__social-tos {
