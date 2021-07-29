@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
-import { get } from 'lodash';
 import page from 'page';
 import classNames from 'classnames';
 
@@ -70,16 +69,9 @@ class MagicLogin extends React.Component {
 			isJetpack: this.props.isJetpackLogin,
 			isGutenboarding: this.props.isGutenboardingLogin,
 			locale: this.props.locale,
+			emailAddress: this.props.query?.email_address,
+			signupUrl: this.props.query?.signup_url,
 		};
-		const emailAddress = get( this.props, [ 'query', 'email_address' ] );
-		if ( emailAddress ) {
-			loginParameters.emailAddress = emailAddress;
-		}
-
-		const signupUrl = get( this.props, [ 'query', 'signup_url' ] );
-		if ( signupUrl ) {
-			loginParameters.signupUrl = signupUrl;
-		}
 
 		page( login( loginParameters ) );
 	};
@@ -97,8 +89,6 @@ class MagicLogin extends React.Component {
 			return null;
 		}
 
-		const signupUrl = get( this.props, [ 'query', 'signup_url' ] );
-
 		// The email address from the URL (if present) is added to the login
 		// parameters in this.onClickEnterPasswordInstead(). But it's left out
 		// here deliberately, to ensure that if someone copies this link to
@@ -107,7 +97,7 @@ class MagicLogin extends React.Component {
 			isJetpack: isJetpackLogin,
 			isGutenboarding: isGutenboardingLogin,
 			locale: locale,
-			...( signupUrl && { signupUrl } ),
+			signupUrl: this.props.query?.signup_url,
 		};
 
 		return (
