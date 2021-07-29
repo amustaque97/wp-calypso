@@ -375,6 +375,8 @@ $image-height: 47px;
 	}
 
 	.login__social-buttons button {
+		background-color: #fdfdfd;
+
 		&[disabled],
 		&:disabled,
 		&.disabled {
