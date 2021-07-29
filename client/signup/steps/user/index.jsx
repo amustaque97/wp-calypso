@@ -116,7 +116,7 @@ export class UserStep extends Component {
 			oauth2ClientId: this.props.oauth2Client && this.props.oauth2Client.id,
 			wccomFrom: this.props.wccomFrom,
 			isReskinned: this.props.isReskinned,
-			signupUrl: window.location.href,
+			signupUrl: window.location.pathname + window.location.search,
 		} );
 	}
 
