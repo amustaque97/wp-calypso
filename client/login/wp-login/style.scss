@@ -379,6 +379,11 @@ $image-height: 47px;
 			margin: 0 0 20px;
 		}
 
+		.login__form-userdata input:last-of-type {
+			/* Note: reduces space between terms and last input box */
+			margin: 0 0 10px;
+		}
+
 		.login__form-userdata,
 		.login__social-buttons {
 			button {
