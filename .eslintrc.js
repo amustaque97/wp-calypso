@@ -179,6 +179,7 @@ module.exports = {
 			files: [
 				'apps/editing-toolkit/**/*',
 				'apps/notifications/**/*',
+				'apps/wpcom-block-editor/**/*',
 				'client/auth/**/*',
 				'client/boot/**/*',
 				'client/controller/**/*',
