@@ -479,7 +479,7 @@ $image-height: 47px;
 	}
 
 	.form-password-input .form-password-input__toggle-visibility {
-		top: 17px;
+		top: calc( ( 44px - 24px ) / 2 ); /* height of input - height of toggle */
 	}
 
 	.login__social-buttons {
