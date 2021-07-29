@@ -23,7 +23,7 @@ import './style.scss';
 import { createElement, createInterpolateElement } from '@wordpress/element';
 import { getSelectedSiteSlug } from 'calypso/state/ui/selectors';
 
-function ConnectDomainStepDone( { domain, step, selectedSiteSlug } ) {
+function ConnectDomainStepDone( { className, domain, step, selectedSiteSlug } ) {
 	const siteDomainsUrl = domainManagementList( selectedSiteSlug );
 
 	const illustration = domainConnectedIllustration && (
@@ -32,7 +32,11 @@ function ConnectDomainStepDone( { domain, step, selectedSiteSlug } ) {
 
 	let heading = (
 		<>
-			<Gridicon icon="checkmark" size={ 24 } />
+			<Gridicon
+				className={ className + '__connected-heading-checkmark' }
+				icon="checkmark"
+				size={ 24 }
+			/>
 			{ __( 'Your domain is connected' ) } )
 		</>
 	);
@@ -62,30 +66,33 @@ function ConnectDomainStepDone( { domain, step, selectedSiteSlug } ) {
 	}
 
 	return (
-		<Card className="connect-domain-step__connected">
-			<div className="connect-domain-step__connected-illustration">{ illustration }</div>
-			<CardHeading className="connect-domain-step__connected-heading" size={ 24 }>
-				{ heading }
-			</CardHeading>
-			<div className="connect-domain-step__connected-content">
-				{ contentLines.map( ( text, index ) => (
-					<div key={ index } className="connect-domain-step__connected-text">
-						{ text }
-					</div>
-				) ) }
-			</div>
-			<div className="connect-domain-step__connected-actions">
-				<Button primary href={ siteDomainsUrl }>
-					{ __( 'Back to Site Domains' ) }
-				</Button>
+		<Card className={ className }>
+			<div className={ className + '__connected' }>
+				<div className={ className + '__connected-illustration' }>{ illustration }</div>
+				<CardHeading className={ className + '__connected-heading' } size={ 24 }>
+					{ heading }
+				</CardHeading>
+				<div className={ className + '__connected-content' }>
+					{ contentLines.map( ( text, index ) => (
+						<div key={ index } className={ className + '__connected-content-text' }>
+							{ text }
+						</div>
+					) ) }
+				</div>
+				<div className={ className + '__connected-actions' }>
+					<Button primary href={ siteDomainsUrl }>
+						{ __( 'Back to Site Domains' ) }
+					</Button>
+				</div>
 			</div>
 		</Card>
 	);
 }
 
 ConnectDomainStepDone.propTypes = {
+	className: PropTypes.string,
 	domain: PropTypes.string.isRequired,
-	step: PropTypes.oneOf( [ stepType.CONNECTED, stepType.VERIFYING ] ).isRequired,
+	step: PropTypes.oneOf( Object.values( stepType ) ).isRequired,
 	selectedSiteSlug: PropTypes.string,
 };
 

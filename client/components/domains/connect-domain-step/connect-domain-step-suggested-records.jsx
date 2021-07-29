@@ -9,7 +9,7 @@ import { Button } from '@automattic/components';
 /**
  * Internal dependencies
  */
-import { modeType, stepType } from './constants';
+import { modeType } from './constants';
 import ConnectDomainStepClipboardButton from './connect-domain-step-clipboard-button';
 import ConnectDomainStepVerificationNotice from './connect-domain-step-verification-error-notice';
 
@@ -18,40 +18,46 @@ import ConnectDomainStepVerificationNotice from './connect-domain-step-verificat
  */
 import './style.scss';
 
-export default function ConnectDomainStepSuggestedNameServers( {
+export default function ConnectDomainStepSuggestedRecords( {
+	baseClassName,
 	mode,
-	onChangeStep,
-	onChangeMode,
 	onVerifyConnection,
 	verificationInProgress,
 	verificationStatus,
+	domainSetupInfo,
 } ) {
-	const continueWithoutVerifying = () => {
-		onChangeMode( modeType.DONE );
-		onChangeStep( stepType.VERIFYING );
-	};
-	const nameServers = [ 'ns1.wordpress.com', 'ns2.wordpress.com', 'ns3.wordpress.com' ];
+	const { data } = domainSetupInfo;
+	const { wpcom_name_servers: nameServers } = data;
 
 	return (
-		<div className="connect-domain-step__suggested-login">
+		<div className={ baseClassName + '__suggested-records' }>
 			<ConnectDomainStepVerificationNotice
 				mode={ mode }
 				verificationStatus={ verificationStatus }
 			/>
-			<p className="connect-domain-step__text">
+			<p className={ baseClassName + '__text' }>
 				{ __( 'Find the name servers on your domain’s settings page.' ) }
 				<br />
 				{ __( 'Replace all the name servers of your domain to use the following values:' ) }
 			</p>
-			<div className="connect-domain-step__name-server-list">
+			<div className={ baseClassName + '__records-list' }>
 				{ nameServers.map( ( nameServer ) => {
-					return <ConnectDomainStepClipboardButton key={ nameServer } text={ nameServer } />;
+					return (
+						<div key={ nameServer } className={ baseClassName + '__records-list-record' }>
+							<div className={ baseClassName + '__records-list-record-item' }>
+								<ConnectDomainStepClipboardButton
+									baseClassName={ baseClassName }
+									text={ nameServer }
+								/>
+							</div>
+						</div>
+					);
 				} ) }
 			</div>
-			<p className="connect-domain-step__text">
+			<p className={ baseClassName + '__text' }>
 				{ __( 'Once you\'ve updated the name servers click on "Verify Connection" below.' ) }
 			</p>
-			<div className="connect-domain-step__actions">
+			<div className={ baseClassName + '__actions' }>
 				<Button
 					primary
 					onClick={ onVerifyConnection }
@@ -60,24 +66,16 @@ export default function ConnectDomainStepSuggestedNameServers( {
 				>
 					{ __( 'Verify Connection' ) }
 				</Button>
-				<Button
-					onClick={ continueWithoutVerifying }
-					disabled={ verificationInProgress }
-					busy={ verificationInProgress }
-				>
-					{ __( 'Finish setup later' ) }
-				</Button>
 			</div>
 		</div>
 	);
 }
 
-ConnectDomainStepSuggestedNameServers.propTypes = {
-	domain: PropTypes.string.isRequired,
+ConnectDomainStepSuggestedRecords.propTypes = {
+	baseClassName: PropTypes.string.isRequired,
 	mode: PropTypes.oneOf( Object.values( modeType ) ).isRequired,
-	onChangeStep: PropTypes.func.isRequired,
-	onChangeMode: PropTypes.func.isRequired,
 	onVerifyConnection: PropTypes.func.isRequired,
 	verificationInProgress: PropTypes.bool,
 	verificationStatus: PropTypes.object.isRequired,
+	domainSetupInfo: PropTypes.object.isRequired,
 };

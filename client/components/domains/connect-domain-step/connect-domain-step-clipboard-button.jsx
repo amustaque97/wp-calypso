@@ -17,29 +17,28 @@ import Gridicon from 'calypso/components/gridicon';
  */
 import './style.scss';
 
-export default function ConnectDomainStepClipboardButton( { text } ) {
+export default function ConnectDomainStepClipboardButton( { baseClassName, classes, text } ) {
 	const [ copiedText, setCopiedText ] = useState( false );
 	const copied = () => setCopiedText( true );
-	const stateClasses = classNames( 'connect-domain-step__clipboard-button-state', {
-		'connect-domain-step__clipboard-button-blue': ! copiedText,
+	const buttonClasses = classNames( baseClassName + '__clipboard-button', ...classes );
+	const stateClasses = classNames( baseClassName + '__clipboard-button-state', {
+		[ baseClassName + '__clipboard-button-blue' ]: ! copiedText,
 	} );
 	const dataClasses = classNames(
-		'connect-domain-step__clipboard-button-data',
-		'connect-domain-step__clipboard-button-text'
+		baseClassName + '__clipboard-button-data',
+		baseClassName + '__clipboard-button-text'
 	);
 
 	return (
-		<ClipboardButton
-			className="connect-domain-step__clipboard-button"
-			text={ text }
-			onCopy={ copied }
-			borderless
-		>
+		<ClipboardButton className={ buttonClasses } text={ text } onCopy={ copied } borderless>
 			<span className={ dataClasses }>{ text }</span>
 			<div className={ stateClasses }>
-				{ /* eslint-disable-next-line wpcalypso/jsx-gridicon-size */ }
-				<Gridicon icon="next-page" size={ 20 } />
-				<span className="connect-domain-step__clipboard-button-text">
+				<Gridicon
+					className={ baseClassName + '__clipboard-button-state-icon' }
+					icon="next-page"
+					size={ 20 } /* eslint-disable-line */
+				/>
+				<span className={ baseClassName + '__clipboard-button-state-text' }>
 					{ copiedText ? __( 'Copied!' ) : __( 'Copy' ) }
 				</span>
 			</div>
@@ -48,5 +47,11 @@ export default function ConnectDomainStepClipboardButton( { text } ) {
 }
 
 ConnectDomainStepClipboardButton.propTypes = {
+	baseClassName: PropTypes.string.isRequired,
+	classes: PropTypes.array,
 	text: PropTypes.string.isRequired,
+};
+
+ConnectDomainStepClipboardButton.defaultProps = {
+	classes: [],
 };

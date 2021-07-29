@@ -17,12 +17,17 @@ import { stepType } from './constants';
  */
 import './style.scss';
 
-export default function ConnectDomainStepSuggestedLogin( { domain, onChangeStep } ) {
-	const setStepUpdateDns = () => onChangeStep( stepType.UPDATE_NAME_SERVERS );
+export default function ConnectDomainStepLogin( {
+	baseClassName,
+	domain,
+	onChangeStep,
+	updateStep,
+} ) {
+	const setStepUpdateDns = () => onChangeStep( updateStep );
 
 	return (
-		<div className="connect-domain-step__suggested-login">
-			<p className="connect-domain-step__text">
+		<div className={ baseClassName + '__login' }>
+			<p className={ baseClassName + '__text' }>
 				{ createInterpolateElement(
 					__(
 						'Log into your domain provider account (like GoDaddy, NameCheap, 1&1, etc.) If you can’t remember who this is: go to <a>this link</a>, enter your domain and look at <em>Reseller Information</em> or <em>Registrar</em> to see the name of your provider.'
@@ -33,7 +38,7 @@ export default function ConnectDomainStepSuggestedLogin( { domain, onChangeStep 
 					}
 				) }
 			</p>
-			<p className="connect-domain-step__text">
+			<p className={ baseClassName + '__text' }>
 				{ sprintf(
 					/* translators: %s: the domain name that the user is connecting to WordPress.com (ex.: example.com) */
 					__(
@@ -43,13 +48,16 @@ export default function ConnectDomainStepSuggestedLogin( { domain, onChangeStep 
 				) }
 			</p>
 			<Button primary onClick={ setStepUpdateDns }>
-				{ __( "I found the domain's setup page" ) }
+				{ __( "I found the domain's settings page" ) }
 			</Button>
 		</div>
 	);
 }
 
-ConnectDomainStepSuggestedLogin.propTypes = {
+ConnectDomainStepLogin.propTypes = {
+	baseClassName: PropTypes.string.isRequired,
 	domain: PropTypes.string.isRequired,
 	onChangeStep: PropTypes.func.isRequired,
+	updateStep: PropTypes.oneOf( [ stepType.UPDATE_A_RECORDS, stepType.UPDATE_NAME_SERVERS ] )
+		.isRequired,
 };

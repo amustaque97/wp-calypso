@@ -12,8 +12,8 @@ import { Card } from '@automattic/components';
 import { modeType, stepType } from './constants';
 import CardHeading from 'calypso/components/card-heading';
 import ConnectDomainStepSuggestedStart from './connect-domain-step-suggested-start';
-import ConnectDomainStepSuggestedLogin from './connect-domain-step-suggested-login';
-import ConnectDomainStepSuggestedNameServers from './connect-domain-step-suggested-name-servers';
+import ConnectDomainStepLogin from './connect-domain-step-login';
+import ConnectDomainStepSuggestedRecords from './connect-domain-step-suggested-records';
 import ConnectDomainStepProgress from './connect-domain-step-progress';
 
 /**
@@ -23,8 +23,8 @@ import './style.scss';
 
 const stepContent = {
 	[ stepType.START ]: ConnectDomainStepSuggestedStart,
-	[ stepType.LOG_IN_TO_PROVIDER ]: ConnectDomainStepSuggestedLogin,
-	[ stepType.UPDATE_NAME_SERVERS ]: ConnectDomainStepSuggestedNameServers,
+	[ stepType.LOG_IN_TO_PROVIDER ]: ConnectDomainStepLogin,
+	[ stepType.UPDATE_NAME_SERVERS ]: ConnectDomainStepSuggestedRecords,
 };
 
 const progressStepList = {
@@ -42,26 +42,34 @@ export default function ConnectDomainStepSuggested( {
 	onVerifyConnection,
 	verificationInProgress,
 	verificationStatus,
+	domainSetupInfo,
 } ) {
 	const StepContent = stepContent[ step ];
-	const StepsProgress = <ConnectDomainStepProgress steps={ progressStepList } currentStep={ step } />;
+	const StepsProgress = (
+		<ConnectDomainStepProgress
+			baseClassName={ className }
+			steps={ progressStepList }
+			currentStep={ step }
+		/>
+	);
 	const showProgress = Object.keys( progressStepList ).includes( step );
 
 	return (
 		<Card className={ className }>
-			<CardHeading className="connect-domain-step__heading">
-				{ __( 'Suggested setup' ) }
-			</CardHeading>
+			<CardHeading className={ className + '__heading' }>{ __( 'Suggested setup' ) }</CardHeading>
 			{ showProgress && StepsProgress }
 			<StepContent
+				baseClassName={ className }
 				domain={ domain }
 				mode={ mode }
 				onChangeMode={ onChangeMode }
 				onChangeStep={ onChangeStep }
 				stepProgress={ showProgress && StepsProgress }
 				onVerifyConnection={ onVerifyConnection }
+				updateStep={ stepType.UPDATE_NAME_SERVERS }
 				verificationInProgress={ verificationInProgress }
 				verificationStatus={ verificationStatus }
+				domainSetupInfo={ domainSetupInfo }
 			/>
 		</Card>
 	);
@@ -77,4 +85,5 @@ ConnectDomainStepSuggested.propTypes = {
 	onVerifyConnection: PropTypes.func.isRequired,
 	verificationInProgress: PropTypes.bool,
 	verificationStatus: PropTypes.object.isRequired,
+	domainSetupInfo: PropTypes.object.isRequired,
 };

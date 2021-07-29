@@ -2,7 +2,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createElement, createInterpolateElement } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import { BackButton } from '@automattic/onboarding';
 /**
  * Internal dependencies
  */
-import { modeType, stepType } from './constants';
+import { modeType, stepType, defaultDomainSetupInfo } from './constants';
 import ConnectDomainStepSuggested from './connect-domain-step-suggested';
 import ConnectDomainStepAdvanced from './connect-domain-step-advanced';
 import ConnectDomainStepDone from './connect-domain-step-done';
@@ -24,55 +24,39 @@ import {
 } from 'calypso/lib/url/support';
 import wp from 'calypso/lib/wp';
 import FormattedHeader from 'calypso/components/formatted-header';
-import { getSelectedSiteSlug } from 'calypso/state/ui/selectors';
+import { getSelectedSite } from 'calypso/state/ui/selectors';
 import { domainMapping } from 'calypso/my-sites/domains/paths';
+import { isMappingVerificationSuccess } from './connect-domain-step-verification-status-parsing.js';
 
 /**
  * Style dependencies
  */
 import './style.scss';
 
-const stepsComponent = {
-	[ modeType.NAME_SERVERS ]: ConnectDomainStepSuggested,
-	[ modeType.A_RECORDS ]: ConnectDomainStepAdvanced,
-	[ modeType.DONE ]: ConnectDomainStepDone,
-};
-
-const supportLink = {
-	[ modeType.NAME_SERVERS ]: MAP_DOMAIN_CHANGE_NAME_SERVERS,
-	[ modeType.A_RECORDS ]: MAP_EXISTING_DOMAIN_UPDATE_A_RECORDS,
-};
-
-const wpcom = wp.undocumented();
-
-function ConnectDomainStep( { domain, selectedSiteSlug } ) {
+function ConnectDomainStep( { domain, selectedSite } ) {
 	const [ mode, setMode ] = useState( modeType.NAME_SERVERS );
 	const [ step, setStep ] = useState( stepType.START );
 	const [ prev, setPrev ] = useState( [] );
 	const [ verificationStatus, setVerificationStatus ] = useState( {} );
 	const [ verificationInProgress, setVerificationInProgress ] = useState( false );
+	const [ domainSetupInfo, setDomainSetupInfo ] = useState( defaultDomainSetupInfo );
+	const [ domainSetupInfoError, setDomainSetupInfoError ] = useState( {} );
+	const [ loadingDomainSetupInfo, setLoadingDomainSetupInfo ] = useState( false );
 
-	const verifyConnection = () => {
-		setVerificationStatus( {} );
-		setVerificationInProgress( true );
-		wpcom
-			.getMappingStatus( domain )
-			.then( ( data ) => setVerificationStatus( { data } ) )
-			.catch( ( error ) => setVerificationStatus( { error } ) )
-			.then( () => setVerificationInProgress( false ) );
+	const baseClassName = 'connect-domain-step';
+
+	const stepsComponent = {
+		[ modeType.NAME_SERVERS ]: ConnectDomainStepSuggested,
+		[ modeType.A_RECORDS ]: ConnectDomainStepAdvanced,
+		[ modeType.DONE ]: ConnectDomainStepDone,
 	};
 
-	const goBack = () => {
-		const last = prev.pop();
-
-		if ( last ) {
-			setMode( last.mode );
-			setStep( last.step );
-			setPrev( prev || [] );
-		} else {
-			page( domainMapping( selectedSiteSlug, domain ) );
-		}
+	const supportLink = {
+		[ modeType.NAME_SERVERS ]: MAP_DOMAIN_CHANGE_NAME_SERVERS,
+		[ modeType.A_RECORDS ]: MAP_EXISTING_DOMAIN_UPDATE_A_RECORDS,
 	};
+
+	const wpcom = wp.undocumented();
 
 	const setNextStep = ( nextStep ) => {
 		setPrev( [ ...prev, { mode, step } ] );
@@ -84,13 +68,72 @@ function ConnectDomainStep( { domain, selectedSiteSlug } ) {
 		setMode( nextMode );
 	};
 
+	const verifyConnection = () => {
+		setVerificationStatus( {} );
+		setVerificationInProgress( true );
+		wpcom
+			.getMappingStatus( domain )
+			.then( ( data ) => {
+				setVerificationStatus( { data } );
+				if ( isMappingVerificationSuccess( mode, data ) ) {
+					setNextMode( modeType.DONE );
+					setNextStep( stepType.CONNECTED );
+				} else {
+					setNextMode( modeType.DONE );
+					setNextStep( stepType.VERIFYING );
+				}
+			} )
+			.catch( ( error ) => {
+				setVerificationStatus( { error } );
+				setNextMode( modeType.DONE );
+				setNextStep( stepType.VERIFYING );
+			} )
+			.then( () => setVerificationInProgress( false ) );
+	};
+
+	const goBack = () => {
+		const last = prev.pop();
+
+		if ( last ) {
+			setMode( last.mode );
+			setStep( last.step );
+			setPrev( prev || [] );
+		} else {
+			page( domainMapping( selectedSite.slug, domain ) );
+		}
+	};
+
+	const hasLoadedDomainSetupInfo = useRef( null );
+	useEffect( () => {
+		if ( domain === hasLoadedDomainSetupInfo.current || loadingDomainSetupInfo ) {
+			return;
+		}
+
+		const loadDomainSetupInfo = () => {
+			setDomainSetupInfoError( {} );
+			setLoadingDomainSetupInfo( true );
+			hasLoadedDomainSetupInfo.current = domain;
+			wpcom
+				.getMappingSetupInfo( selectedSite.ID, domain )
+				.then( ( data ) => setDomainSetupInfo( { data } ) )
+				.catch( ( error ) => setDomainSetupInfoError( { error } ) )
+				.then( () => setLoadingDomainSetupInfo( false ) );
+		};
+		loadDomainSetupInfo();
+	}, [ domain, domainSetupInfo, loadingDomainSetupInfo, selectedSite.ID ] );
+
 	const StepsComponent = stepsComponent[ mode ];
 	const isStepStart = stepType.START === step;
 
 	const supportInfo = (
-		<div className="connect-domain-step__support-documentation">
-			<Gridicon icon="help-outline" size={ 16 } /> { /* eslint-disable-line */ }
-			<span className="connect-domain-step__text">
+		<div className={ baseClassName + '__support-documentation' }>
+			<Gridicon
+				className={ baseClassName + '__support-documentation-info-icon' }
+				icon="help-outline"
+				size={ 16 } /* eslint-disable-line */
+			/>{ ' ' }
+			{ /* eslint-disable-line */ }
+			<span className={ baseClassName + '__text' }>
 				{ createInterpolateElement(
 					__( 'Not finding your way? You can read our detailed <a>support documentation</a>.' ),
 					{
@@ -101,8 +144,6 @@ function ConnectDomainStep( { domain, selectedSiteSlug } ) {
 		</div>
 	);
 
-	console.log( prev );
-
 	const headerText = sprintf(
 		/* translators: %s: domain name being connected (ex.: example.com) */
 		__( 'Connect %s' ),
@@ -111,18 +152,18 @@ function ConnectDomainStep( { domain, selectedSiteSlug } ) {
 
 	return (
 		<>
-			<BackButton className="connect-domain-step__go-back" onClick={ goBack }>
+			<BackButton className={ baseClassName + '__go-back' } onClick={ goBack }>
 				<Gridicon icon="arrow-left" size={ 18 } />
 				{ __( 'Back' ) }
 			</BackButton>
 			<FormattedHeader
 				brandFont
-				className="connect-domain-step__page-heading"
+				className={ baseClassName + '__page-heading' }
 				headerText={ headerText }
 				align="left"
 			/>
 			<StepsComponent
-				className="connect-domain-step"
+				className={ baseClassName }
 				domain={ domain }
 				step={ step }
 				mode={ mode }
@@ -131,6 +172,8 @@ function ConnectDomainStep( { domain, selectedSiteSlug } ) {
 				onVerifyConnection={ verifyConnection }
 				verificationInProgress={ verificationInProgress }
 				verificationStatus={ verificationStatus || {} }
+				domainSetupInfo={ domainSetupInfo }
+				domainSetupInfoError={ domainSetupInfoError }
 			/>
 			{ isStepStart && <DomainTransferRecommendation /> }
 			{ supportInfo }
@@ -140,9 +183,9 @@ function ConnectDomainStep( { domain, selectedSiteSlug } ) {
 
 ConnectDomainStep.propTypes = {
 	domain: PropTypes.string.isRequired,
-	selectedSiteSlug: PropTypes.string,
+	selectedSite: PropTypes.object,
 };
 
-export default connect( ( state ) => ( { selectedSiteSlug: getSelectedSiteSlug( state ) } ) )(
+export default connect( ( state ) => ( { selectedSite: getSelectedSite( state ) } ) )(
 	ConnectDomainStep
 );

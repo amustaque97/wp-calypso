@@ -15,11 +15,11 @@ import Gridicon from 'calypso/components/gridicon';
  */
 import './style.scss';
 
-export default function ConnectDomainStepProgress( { steps, currentStep } ) {
+export default function ConnectDomainStepProgress( { baseClassName, steps, currentStep } ) {
 	let currentStepNumber = 0;
 
 	return (
-		<div className="connect-domain-step__progress">
+		<div className={ baseClassName + '__progress' }>
 			{ Object.values( steps )
 				.map( ( stepName, index ) => {
 					const stepNumber = index + 1;
@@ -29,22 +29,26 @@ export default function ConnectDomainStepProgress( { steps, currentStep } ) {
 
 					const stepCompleted = 0 === currentStepNumber || currentStepNumber > stepNumber;
 
-					const stepNumberClasses = classNames( 'connect-domain-step__progress-number', {
+					const stepNumberClasses = classNames( baseClassName + '__progress-number', {
 						'current-step': currentStepNumber === stepNumber,
 						'completed-step': stepCompleted,
 					} );
 
 					const stepNumberContent = stepCompleted ? (
-						<Gridicon icon="checkmark" size={ 16 } /> /* eslint-disable-line */
+						<Gridicon
+							className={ baseClassName + '__progress-number-checkmark' }
+							icon="checkmark"
+							size={ 16 } /* eslint-disable-line */
+						/>
 					) : (
 						stepNumber
 					);
 
 					return (
-						<React.Fragment key={ 'step-' + stepNumber }>
+						<div className={ baseClassName + '__progress-step' } key={ 'step-' + stepNumber }>
 							<span className={ stepNumberClasses }>{ stepNumberContent }</span>
-							<span className="connect-domain-step__progress-step-name">{ stepName }</span>
-						</React.Fragment>
+							<span className={ baseClassName + '__progress-step-name' }>{ stepName }</span>
+						</div>
 					);
 				} )
 				.reduce( ( list, element, index ) => {
@@ -52,8 +56,12 @@ export default function ConnectDomainStepProgress( { steps, currentStep } ) {
 						? [ element ]
 						: [
 								...list,
-								// eslint-disable-next-line wpcalypso/jsx-gridicon-size
-								<Gridicon key={ 'icon-' + index } icon="chevron-right" size={ 20 } />,
+								<Gridicon
+									className={ baseClassName + '__progress-step-separator' }
+									key={ 'icon-' + index }
+									icon="chevron-right"
+									size={ 20 } /* eslint-disable-line */
+								/>,
 								element,
 						  ];
 				}, null ) }
@@ -62,9 +70,7 @@ export default function ConnectDomainStepProgress( { steps, currentStep } ) {
 }
 
 ConnectDomainStepProgress.propTypes = {
+	baseClassName: PropTypes.string.isRequired,
 	steps: PropTypes.object.isRequired,
 	currentStep: PropTypes.string.isRequired,
 };
-
-/* eslint-disable-next-line wpcalypso/jsx-gridicon-size */
-// <Gridicon icon="chevron-right" size={ 20 } />
