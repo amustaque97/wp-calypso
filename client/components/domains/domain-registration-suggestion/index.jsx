@@ -363,7 +363,7 @@ class DomainRegistrationSuggestion extends React.Component {
 	}
 
 	renderMatchReason() {
-		if ( this.props.showStrikedOutPrice ) {
+		if ( this.props.isReskinned ) {
 			return null;
 		}
 
