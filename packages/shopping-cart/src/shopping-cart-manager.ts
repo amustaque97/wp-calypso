@@ -33,6 +33,9 @@ import type {
 } from './types';
 
 const debug = debugFactory( 'shopping-cart:shopping-cart-manager' );
+const emptyCart = getEmptyResponseCart();
+const getEmptyCart = () => Promise.resolve( emptyCart );
+const cartKeysThatDoNotAllowInitialFetch = [ 'no-site', 'no-user' ];
 
 function createManager(
 	state: ShoppingCartState,
@@ -74,8 +77,15 @@ function createManagerWrapper(
 
 	let lastCacheStatus = '';
 
+	const shouldNotFetchRealCart = cartKeysThatDoNotAllowInitialFetch.includes( cartKey );
+
 	const setServerCart = ( cartParam: RequestCart ) => setCart( String( cartKey ), cartParam );
-	const getServerCart = () => getCart( String( cartKey ) );
+	const getServerCart = () => {
+		if ( shouldNotFetchRealCart ) {
+			return getEmptyCart();
+		}
+		return getCart( String( cartKey ) );
+	};
 
 	const syncCartToServer = createCartSyncMiddleware( setServerCart );
 	const initializeCartFromServer = createCartInitMiddleware( getServerCart );
@@ -241,8 +251,6 @@ function createManagerWrapper(
 		getManager,
 	};
 }
-
-const emptyCart = getEmptyResponseCart();
 
 const noopManager: ShoppingCartManager = {
 	subscribe: () => () => null,
