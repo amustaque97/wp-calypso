@@ -31,10 +31,7 @@ export default function DomainTransferRecommendation() {
 					) }
 				</span>
 			</div>
-			<Button
-				className="domain-transfer-recommendation__action"
-				href={ INCOMING_DOMAIN_TRANSFER }
-			>
+			<Button className="domain-transfer-recommendation__action" href={ INCOMING_DOMAIN_TRANSFER }>
 				{ __( 'Transfer instead' ) }
 			</Button>
 		</Card>

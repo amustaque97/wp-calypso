@@ -56,8 +56,6 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 		[ modeType.A_RECORDS ]: MAP_EXISTING_DOMAIN_UPDATE_A_RECORDS,
 	};
 
-	const wpcom = wp.undocumented();
-
 	const setNextStep = ( nextStep ) => {
 		setPrev( [ ...prev, { mode, step } ] );
 		setStep( nextStep );
@@ -71,7 +69,7 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 	const verifyConnection = () => {
 		setVerificationStatus( {} );
 		setVerificationInProgress( true );
-		wpcom
+		wp.undocumented()
 			.getMappingStatus( domain )
 			.then( ( data ) => {
 				setVerificationStatus( { data } );
@@ -113,7 +111,7 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 			setDomainSetupInfoError( {} );
 			setLoadingDomainSetupInfo( true );
 			hasLoadedDomainSetupInfo.current = domain;
-			wpcom
+			wp.undocumented()
 				.getMappingSetupInfo( selectedSite.ID, domain )
 				.then( ( data ) => setDomainSetupInfo( { data } ) )
 				.catch( ( error ) => setDomainSetupInfoError( { error } ) )
