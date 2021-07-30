@@ -15,6 +15,7 @@ import previousStep from '../cancel-purchase-form/previous-step';
 import { recordTracksEvent } from 'calypso/state/analytics/actions';
 import isSiteAutomatedTransfer from 'calypso/state/selectors/is-site-automated-transfer';
 import JetpackBenefitsStep from 'calypso/components/marketing-survey/cancel-jetpack-form/jetpack-benefits-step';
+import JetpackCancellationSurvey from 'calypso/components/marketing-survey/cancel-jetpack-form/jetpack-cancellation-survey';
 
 /**
  * Style dependencies
@@ -218,7 +219,14 @@ class CancelJetpackForm extends React.Component {
 			// ask for brief feedback on why the user is cancelling the plan
 			// follow similar pattern used in the Jetpack disconnection flow
 			// make sure the user has the ability to skip the question
-			return 'Survey Question';
+
+			return (
+				<JetpackCancellationSurvey
+					onAnswerClick={ ( answerId ) => {
+						console.log( { answerId } );
+					} }
+				/>
+			);
 		}
 
 		// default output just in case
