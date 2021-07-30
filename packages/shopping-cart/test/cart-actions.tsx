@@ -5,16 +5,19 @@ import {
 	fireEvent,
 	waitForElementToBeRemoved,
 } from '@testing-library/react';
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { getEmptyResponseCart } from '../src/empty-carts';
-import { useShoppingCart, ShoppingCartProvider } from '../src/index';
+import {
+	useShoppingCart,
+	ShoppingCartProvider,
+	createShoppingCartManagerClient,
+} from '../src/index';
 import type {
 	RequestCartProduct,
 	ResponseCartProduct,
 	RequestCart,
 	ResponseCart,
 	MinimalRequestCartProduct,
-	ShoppingCartManagerOptions,
 } from '../src/types';
 
 // This is required to fix the "regeneratorRuntime is not defined" error
@@ -194,14 +197,14 @@ function ProductList( {
 }
 
 function MockProvider( { children } ) {
-	const options = useMemo< ShoppingCartManagerOptions >(
-		() => ( {
-			defaultCartKey: mainCartKey,
-		} ),
-		[]
-	);
+	const managerClient = createShoppingCartManagerClient( { getCart, setCart } );
 	return (
-		<ShoppingCartProvider options={ options } getCart={ getCart } setCart={ setCart }>
+		<ShoppingCartProvider
+			options={ {
+				defaultCartKey: mainCartKey,
+			} }
+			managerClient={ managerClient }
+		>
 			{ children }
 		</ShoppingCartProvider>
 	);
