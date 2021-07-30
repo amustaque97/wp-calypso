@@ -263,7 +263,7 @@ class DomainRegistrationSuggestion extends React.Component {
 		return (
 			<div className={ titleWrapperClassName }>
 				<h3 className="domain-registration-suggestion__title">{ title }</h3>
-				{ isReskinned && this.renderProgressBar() }
+				{ this.renderProgressBar() }
 				{ isPremium && (
 					<PremiumBadge restrictedPremium={ premiumDomain?.is_price_limit_exceeded } />
 				) }
@@ -309,7 +309,6 @@ class DomainRegistrationSuggestion extends React.Component {
 			translate,
 			isFeatured,
 			showStrikedOutPrice,
-			isReskinned,
 		} = this.props;
 
 		if ( ! isFeatured ) {
@@ -323,11 +322,7 @@ class DomainRegistrationSuggestion extends React.Component {
 		let title;
 		let progressBarProps;
 		if ( isRecommended ) {
-			title = showStrikedOutPrice ? translate( 'Our Recommendation' ) : translate( 'Best Match' );
-
-			if ( isReskinned ) {
-				title = translate( 'Recommended' );
-			}
+			title = showStrikedOutPrice ? translate( 'Recommended' ) : translate( 'Best Match' );
 
 			progressBarProps = {
 				color: NOTICE_GREEN,
@@ -347,10 +342,8 @@ class DomainRegistrationSuggestion extends React.Component {
 		if ( title ) {
 			if ( showStrikedOutPrice ) {
 				const badgeClassName = classNames( '', {
-					success: isRecommended && ! isReskinned,
-					'info-blue': isBestAlternative && ! isReskinned,
-					'info-green': isRecommended && isReskinned,
-					'info-purple': isBestAlternative && isReskinned,
+					'info-green': isRecommended,
+					'info-purple': isBestAlternative,
 				} );
 
 				return (
@@ -432,7 +425,6 @@ class DomainRegistrationSuggestion extends React.Component {
 				isReskinned={ isReskinned }
 			>
 				{ this.renderDomain() }
-				{ ! isReskinned && this.renderProgressBar() }
 				{ this.renderMatchReason() }
 			</DomainSuggestion>
 		);
