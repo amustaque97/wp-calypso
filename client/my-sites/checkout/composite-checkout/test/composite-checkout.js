@@ -1093,15 +1093,13 @@ describe( 'CompositeCheckout', () => {
 
 	it( 'does not display loading when old cart store has pending updates and then they complete', async () => {
 		let renderResult;
-		let additionalProps = { cart: { hasLoadedFromServer: true, hasPendingServerUpdates: true } };
 		await act( async () => {
-			renderResult = render( <MyCheckout additionalProps={ additionalProps } />, container );
+			renderResult = render( <MyCheckout useUndefinedCartKey={ true } />, container );
 		} );
-		additionalProps = { cart: { hasLoadedFromServer: true, hasPendingServerUpdates: false } };
-		await act( async () => {
-			renderResult.rerender( <MyCheckout additionalProps={ additionalProps } />, container );
+		renderResult.rerender( <MyCheckout />, container );
+		await waitFor( () => {
+			expect( screen.queryByText( 'Loading checkout' ) ).not.toBeInTheDocument();
 		} );
-		expect( screen.queryByText( 'Loading checkout' ) ).not.toBeInTheDocument();
 	} );
 } );
 
