@@ -10,7 +10,8 @@ import { createElement, createInterpolateElement } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { stepType } from './constants';
+import ConnectDomainStepWrapper from './connect-domain-step-wrapper';
+import { modeType, stepSlug } from './constants';
 
 /**
  * Style dependencies
@@ -18,16 +19,16 @@ import { stepType } from './constants';
 import './style.scss';
 
 export default function ConnectDomainStepLogin( {
-	baseClassName,
+	className,
+	currentPageSlug,
 	domain,
-	onChangeStep,
-	updateStep,
+	mode,
+	onNextStep,
+	progressStepList,
 } ) {
-	const setStepUpdateDns = () => onChangeStep( updateStep );
-
-	return (
-		<div className={ baseClassName + '__login' }>
-			<p className={ baseClassName + '__text' }>
+	const stepContent = (
+		<div className={ className + '__login' }>
+			<p className={ className + '__text' }>
 				{ createInterpolateElement(
 					__(
 						'Log into your domain provider account (like GoDaddy, NameCheap, 1&1, etc.) If you can’t remember who this is: go to <a>this link</a>, enter your domain and look at <em>Reseller Information</em> or <em>Registrar</em> to see the name of your provider.'
@@ -38,7 +39,7 @@ export default function ConnectDomainStepLogin( {
 					}
 				) }
 			</p>
-			<p className={ baseClassName + '__text' }>
+			<p className={ className + '__text' }>
 				{ sprintf(
 					/* translators: %s: the domain name that the user is connecting to WordPress.com (ex.: example.com) */
 					__(
@@ -47,17 +48,28 @@ export default function ConnectDomainStepLogin( {
 					domain
 				) }
 			</p>
-			<Button primary onClick={ setStepUpdateDns }>
+			<Button primary onClick={ onNextStep }>
 				{ __( "I found the domain's settings page" ) }
 			</Button>
 		</div>
 	);
+
+	return (
+		<ConnectDomainStepWrapper
+			className={ className }
+			mode={ mode }
+			progressStepList={ progressStepList }
+			currentPageSlug={ currentPageSlug }
+			stepContent={ stepContent }
+		/>
+	);
 }
 
 ConnectDomainStepLogin.propTypes = {
-	baseClassName: PropTypes.string.isRequired,
+	className: PropTypes.string.isRequired,
+	currentPageSlug: PropTypes.oneOf( Object.values( stepSlug ) ).isRequired,
 	domain: PropTypes.string.isRequired,
-	onChangeStep: PropTypes.func.isRequired,
-	updateStep: PropTypes.oneOf( [ stepType.UPDATE_A_RECORDS, stepType.UPDATE_NAME_SERVERS ] )
-		.isRequired,
+	mode: PropTypes.oneOf( Object.values( modeType ) ).isRequired,
+	onNextStep: PropTypes.func.isRequired,
+	progressStepList: PropTypes.object.isRequired,
 };

@@ -26,7 +26,11 @@
 		max-width: 660px;
 	}
 
-	&__support-documentation {
+	&__info-links {
+		& + & {
+			margin-top: 8px;
+		}
+
 		font-size: $font-body-small;
 		padding: 0 16px;
 
@@ -34,7 +38,7 @@
 			padding: 0;
 		}
 
-		&-info-icon {
+		&-icon {
 			position: relative;
 			bottom: -3px;
 		}
@@ -281,7 +285,8 @@
 		}
 	}
 
-	&__change_mode_link {
+	&__change_mode_link,
+	&__info-links a {
 		cursor: pointer;
 	}
 

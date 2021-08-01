@@ -121,7 +121,7 @@ const mapDomainSetup = ( context, next ) => {
 			/>
 			<DocumentHead title={ translate( 'Connect a Domain Setup' ) } />
 			<CalypsoShoppingCartProvider>
-				<ConnectDomainStep domain={ context.params.domain } />
+				<ConnectDomainStep domain={ context.params.domain } initialStep={ context.query.step } />
 			</CalypsoShoppingCartProvider>
 		</Main>
 	);

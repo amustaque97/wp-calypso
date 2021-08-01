@@ -35,7 +35,7 @@ export function getMappingVerificationErrorMessage( mode, verificationStatus ) {
 		return error?.message || genericError;
 	}
 
-	if ( modeType.NAME_SERVERS === mode && ! hasWpcomNameservers ) {
+	if ( modeType.SUGGESTED === mode && ! hasWpcomNameservers ) {
 		if ( nameServers.length === 0 ) {
 			return __( "We couldn't retrieve the name servers for your domain. Please try again." );
 		}
@@ -52,7 +52,7 @@ export function getMappingVerificationErrorMessage( mode, verificationStatus ) {
 		);
 	}
 
-	if ( modeType.A_RECORDS === mode && ! hasWpcomIpAddresses ) {
+	if ( modeType.ADVANCED === mode && ! hasWpcomIpAddresses ) {
 		if ( hostIpAddresses.length === 0 ) {
 			return __( "We couldn't retrieve the A records for your domain. Please try again." );
 		}
@@ -92,11 +92,11 @@ export function isMappingVerificationSuccess( mode, verificationStatus ) {
 		resolves_to_wpcom: resolvesToWpcom,
 	} = data || {};
 
-	if ( modeType.NAME_SERVERS === mode && hasWpcomNameservers ) {
+	if ( modeType.SUGGESTED === mode && hasWpcomNameservers ) {
 		return true;
 	}
 
-	if ( modeType.A_RECORDS === mode && hasWpcomIpAddresses ) {
+	if ( modeType.ADVANCED === mode && hasWpcomIpAddresses ) {
 		return true;
 	}
 

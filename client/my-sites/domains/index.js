@@ -273,7 +273,6 @@ export default function () {
 			paths.domainMappingSetup( ':site', ':domain' ),
 			siteSelection,
 			navigation,
-			// domainsController.redirectIfNoSite( '/domains/add/mapping' ),
 			domainsController.jetpackNoDomainsWarning,
 			domainsController.mapDomainSetup,
 			makeLayout,

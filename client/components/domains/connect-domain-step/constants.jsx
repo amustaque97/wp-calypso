@@ -1,7 +1,6 @@
 export const modeType = {
-	NAME_SERVERS: 'suggested',
-	A_RECORDS: 'advanced',
-	DONE: 'done',
+	SUGGESTED: 'suggested',
+	ADVANCED: 'advanced',
 };
 
 export const stepType = {
@@ -11,6 +10,19 @@ export const stepType = {
 	UPDATE_A_RECORDS: 'update_a_records',
 	CONNECTED: 'connected',
 	VERIFYING: 'verifying',
+};
+
+export const stepSlug = {
+	SUGGESTED_START: 'suggested_start',
+	SUGGESTED_LOGIN: 'suggested_login',
+	SUGGESTED_UPDATE: 'suggested_update',
+	SUGGESTED_VERIFYING: 'suggested_verifying',
+	SUGGESTED_CONNECTED: 'suggested_connected',
+	ADVANCED_START: 'advanced_start',
+	ADVANCED_LOGIN: 'advanced_login',
+	ADVANCED_UPDATE: 'advanced_update',
+	ADVANCED_VERIFYING: 'advanced_verifying',
+	ADVANCED_CONNECTED: 'advanced_connected',
 };
 
 export const defaultDomainSetupInfo = {

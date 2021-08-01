@@ -170,8 +170,12 @@ export function domainMapping( siteName, domain = '' ) {
 	return path;
 }
 
-export function domainMappingSetup( siteName, domainName ) {
-	return domainMapping( siteName ) + `/setup/${ domainName }`;
+export function domainMappingSetup( siteName, domainName, step = '' ) {
+	let path = `/domains/mapping/${ siteName }/setup/${ domainName }`;
+	if ( step ) {
+		path += `?step=${ step }`;
+	}
+	return path;
 }
 
 /**

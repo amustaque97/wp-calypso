@@ -11,8 +11,9 @@ import MaterialIcon from 'calypso/components/material-icon';
 /**
  * Internal dependencies
  */
-import { modeType, stepType } from './constants';
 import CardHeading from 'calypso/components/card-heading';
+import ConnectDomainStepWrapper from './connect-domain-step-wrapper';
+import { modeType, stepSlug } from 'calypso/components/domains/connect-domain-step/constants';
 
 /**
  * Style dependencies
@@ -20,16 +21,16 @@ import CardHeading from 'calypso/components/card-heading';
 import './style.scss';
 
 export default function ConnectDomainStepSuggestedStart( {
-	baseClassName,
-	onChangeMode,
-	onChangeStep,
+	className,
+	currentPageSlug,
+	mode,
+	onNextStep,
+	onSwitchToAdvancedSetup,
+	progressStepList,
 } ) {
-	const setModeAdvanced = () => onChangeMode( modeType.A_RECORDS );
-	const setStepLogin = () => onChangeStep( stepType.LOG_IN_TO_PROVIDER );
-
-	return (
-		<div className={ baseClassName + '__suggested-start' }>
-			<p className={ baseClassName + '__text' }>
+	const stepContent = (
+		<div className={ className + '__suggested-start' }>
+			<p className={ className + '__text' }>
 				{ createInterpolateElement(
 					__(
 						'This is the easiest way to connect your domain, using name servers. If needed you can also use our <a>advanced setup</a>, using root A & CNAME records.'
@@ -37,29 +38,42 @@ export default function ConnectDomainStepSuggestedStart( {
 					{
 						a: createElement( 'a', {
 							className: 'connect-domain-step__change_mode_link',
-							onClick: setModeAdvanced,
+							onClick: onSwitchToAdvancedSetup,
 						} ),
 					}
 				) }
 			</p>
-			<CardHeading className={ baseClassName + '__sub-heading' }>
-				<MaterialIcon className={ baseClassName + '__sub-heading-icon' } size={ 24 } icon="timer" />
+			<CardHeading className={ className + '__sub-heading' }>
+				<MaterialIcon className={ className + '__sub-heading-icon' } size={ 24 } icon="timer" />
 				{ __( 'How long will it take?' ) }
 			</CardHeading>
-			<p className={ baseClassName + '__text' }>
+			<p className={ className + '__text' }>
 				{ __( 'It takes 5-15 minutes to set up.' ) }
 				<br />
 				{ __( 'It can take up to 72 hours for the domain to be fully connected.' ) }
 			</p>
-			<Button primary onClick={ setStepLogin }>
+			<Button primary onClick={ onNextStep }>
 				{ __( 'Start setup' ) }
 			</Button>
 		</div>
 	);
+
+	return (
+		<ConnectDomainStepWrapper
+			className={ className }
+			mode={ mode }
+			progressStepList={ progressStepList }
+			currentPageSlug={ currentPageSlug }
+			stepContent={ stepContent }
+		/>
+	);
 }
 
 ConnectDomainStepSuggestedStart.propTypes = {
-	baseClassName: PropTypes.string.isRequired,
-	onChangeStep: PropTypes.func.isRequired,
-	onChangeMode: PropTypes.func.isRequired,
+	className: PropTypes.string.isRequired,
+	currentPageSlug: PropTypes.oneOf( Object.values( stepSlug ) ).isRequired,
+	mode: PropTypes.oneOf( Object.values( modeType ) ).isRequired,
+	onNextStep: PropTypes.func.isRequired,
+	onSwitchToAdvancedSetup: PropTypes.func.isRequired,
+	progressStepList: PropTypes.object.isRequired,
 };

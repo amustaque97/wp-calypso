@@ -2,8 +2,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useRef } from 'react';
-import { createElement, createInterpolateElement } from '@wordpress/element';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { connect } from 'react-redux';
 import page from 'page';
@@ -12,16 +11,17 @@ import { BackButton } from '@automattic/onboarding';
 /**
  * Internal dependencies
  */
-import { modeType, stepType, defaultDomainSetupInfo } from './constants';
-import ConnectDomainStepSuggested from './connect-domain-step-suggested';
-import ConnectDomainStepAdvanced from './connect-domain-step-advanced';
-import ConnectDomainStepDone from './connect-domain-step-done';
-import DomainTransferRecommendation from 'calypso/components/domains/domain-transfer-recommendation';
-import { Gridicon } from 'calypso/devdocs/design/playground-scope';
+import { modeType, stepType, stepSlug, defaultDomainSetupInfo } from './constants';
 import {
-	MAP_DOMAIN_CHANGE_NAME_SERVERS,
-	MAP_EXISTING_DOMAIN_UPDATE_A_RECORDS,
-} from 'calypso/lib/url/support';
+	defaultStepsDefinition,
+	getPageSlug,
+	getProgressStepList,
+	getStepsDefinition,
+} from './page-definitions';
+import ConnectDomainStepSwitchSetupInfoLink from './connect-domain-step-switch-setup-info-link';
+import ConnectDomainStepSupportInfoLink from 'calypso/components/domains/connect-domain-step/connect-domain-step-support-info-link';
+import DomainTransferRecommendation from 'calypso/components/domains/domain-transfer-recommendation';
+import Gridicon from 'calypso/components/gridicon';
 import wp from 'calypso/lib/wp';
 import FormattedHeader from 'calypso/components/formatted-header';
 import { getSelectedSite } from 'calypso/state/ui/selectors';
@@ -33,38 +33,61 @@ import { isMappingVerificationSuccess } from './connect-domain-step-verification
  */
 import './style.scss';
 
-function ConnectDomainStep( { domain, selectedSite } ) {
-	const [ mode, setMode ] = useState( modeType.NAME_SERVERS );
+function ConnectDomainStep( { domain, selectedSite, initialStep } ) {
+	const [ mode, setMode ] = useState( modeType.SUGGESTED );
 	const [ step, setStep ] = useState( stepType.START );
-	const [ prev, setPrev ] = useState( [] );
+	const [ currentPageSlug, setCurrentPageSlug ] = useState( stepSlug.SUGGESTED_START );
+	const [ progressStepList, setProgressStepList ] = useState( {} );
 	const [ verificationStatus, setVerificationStatus ] = useState( {} );
 	const [ verificationInProgress, setVerificationInProgress ] = useState( false );
 	const [ domainSetupInfo, setDomainSetupInfo ] = useState( defaultDomainSetupInfo );
 	const [ domainSetupInfoError, setDomainSetupInfoError ] = useState( {} );
 	const [ loadingDomainSetupInfo, setLoadingDomainSetupInfo ] = useState( false );
+	const [ stepsDefinition, setStepsDefinition ] = useState( defaultStepsDefinition );
 
 	const baseClassName = 'connect-domain-step';
+	const StepsComponent = stepsDefinition?.[ currentPageSlug ].component;
+	const isStepStart = stepType.START === step;
 
-	const stepsComponent = {
-		[ modeType.NAME_SERVERS ]: ConnectDomainStepSuggested,
-		[ modeType.A_RECORDS ]: ConnectDomainStepAdvanced,
-		[ modeType.DONE ]: ConnectDomainStepDone,
+	const setPage = useCallback(
+		( pageStepSlug ) => {
+			setCurrentPageSlug( pageStepSlug );
+			setStep( stepsDefinition[ pageStepSlug ].step );
+			setMode( stepsDefinition[ pageStepSlug ].mode );
+		},
+		[ stepsDefinition ]
+	);
+
+	const setNextStep = () => {
+		const next = stepsDefinition[ currentPageSlug ]?.next;
+		next && setPage( next );
 	};
 
-	const supportLink = {
-		[ modeType.NAME_SERVERS ]: MAP_DOMAIN_CHANGE_NAME_SERVERS,
-		[ modeType.A_RECORDS ]: MAP_EXISTING_DOMAIN_UPDATE_A_RECORDS,
+	const switchToSuggestedSetup = () => {
+		setPage( stepSlug.SUGGESTED_START );
 	};
 
-	const setNextStep = ( nextStep ) => {
-		setPrev( [ ...prev, { mode, step } ] );
-		setStep( nextStep );
+	const switchToAdvancedSetup = () => {
+		setPage( stepSlug.ADVANCED_START );
 	};
 
-	const setNextMode = ( nextMode ) => {
-		setPrev( [ ...prev, { mode, step } ] );
-		setMode( nextMode );
-	};
+	useEffect( () => {
+		setStepsDefinition( getStepsDefinition( selectedSite, domain ) );
+	}, [ domain ] );
+
+	useEffect( () => {
+		setCurrentPageSlug( getPageSlug( mode, step, stepsDefinition ) );
+	}, [ mode, step, stepsDefinition ] );
+
+	useEffect( () => {
+		if ( initialStep && Object.values( stepSlug ).includes( initialStep ) ) {
+			setPage( initialStep );
+		}
+	}, [ initialStep, setPage ] );
+
+	useEffect( () => {
+		setProgressStepList( getProgressStepList( mode, stepsDefinition ) );
+	}, [ mode, stepsDefinition ] );
 
 	const verifyConnection = () => {
 		setVerificationStatus( {} );
@@ -74,28 +97,23 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 			.then( ( data ) => {
 				setVerificationStatus( { data } );
 				if ( isMappingVerificationSuccess( mode, data ) ) {
-					setNextMode( modeType.DONE );
-					setNextStep( stepType.CONNECTED );
+					setStep( stepType.CONNECTED );
 				} else {
-					setNextMode( modeType.DONE );
-					setNextStep( stepType.VERIFYING );
+					setStep( stepType.VERIFYING );
 				}
 			} )
 			.catch( ( error ) => {
 				setVerificationStatus( { error } );
-				setNextMode( modeType.DONE );
-				setNextStep( stepType.VERIFYING );
+				setStep( stepType.VERIFYING );
 			} )
 			.then( () => setVerificationInProgress( false ) );
 	};
 
 	const goBack = () => {
-		const last = prev.pop();
+		const prevPageSlug = stepsDefinition[ currentPageSlug ]?.prev;
 
-		if ( last ) {
-			setMode( last.mode );
-			setStep( last.step );
-			setPrev( prev || [] );
+		if ( prevPageSlug ) {
+			setPage( prevPageSlug );
 		} else {
 			page( domainMapping( selectedSite.slug, domain ) );
 		}
@@ -120,28 +138,6 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 		loadDomainSetupInfo();
 	}, [ domain, domainSetupInfo, loadingDomainSetupInfo, selectedSite.ID ] );
 
-	const StepsComponent = stepsComponent[ mode ];
-	const isStepStart = stepType.START === step;
-
-	const supportInfo = (
-		<div className={ baseClassName + '__support-documentation' }>
-			<Gridicon
-				className={ baseClassName + '__support-documentation-info-icon' }
-				icon="help-outline"
-				size={ 16 } /* eslint-disable-line */
-			/>{ ' ' }
-			{ /* eslint-disable-line */ }
-			<span className={ baseClassName + '__text' }>
-				{ createInterpolateElement(
-					__( 'Not finding your way? You can read our detailed <a>support documentation</a>.' ),
-					{
-						a: createElement( 'a', { href: supportLink[ mode ], target: '_blank' } ),
-					}
-				) }
-			</span>
-		</div>
-	);
-
 	const headerText = sprintf(
 		/* translators: %s: domain name being connected (ex.: example.com) */
 		__( 'Connect %s' ),
@@ -165,16 +161,27 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 				domain={ domain }
 				step={ step }
 				mode={ mode }
-				onChangeStep={ setNextStep }
-				onChangeMode={ setNextMode }
+				onNextStep={ setNextStep }
 				onVerifyConnection={ verifyConnection }
 				verificationInProgress={ verificationInProgress }
 				verificationStatus={ verificationStatus || {} }
 				domainSetupInfo={ domainSetupInfo }
 				domainSetupInfoError={ domainSetupInfoError }
+				onSwitchToAdvancedSetup={ switchToAdvancedSetup }
+				onSwitchToSuggestedSetup={ switchToSuggestedSetup }
+				progressStepList={ progressStepList }
+				currentPageSlug={ currentPageSlug }
 			/>
 			{ isStepStart && <DomainTransferRecommendation /> }
-			{ supportInfo }
+			<ConnectDomainStepSupportInfoLink baseClassName={ baseClassName } mode={ mode } />
+			<ConnectDomainStepSwitchSetupInfoLink
+				baseClassName={ baseClassName }
+				currentMode={ mode }
+				currentStep={ step }
+				setPage={ setPage }
+				onSwitchToAdvancedSetup={ switchToAdvancedSetup }
+				onSwitchToSuggestedSetup={ switchToSuggestedSetup }
+			/>
 		</>
 	);
 }
@@ -182,6 +189,7 @@ function ConnectDomainStep( { domain, selectedSite } ) {
 ConnectDomainStep.propTypes = {
 	domain: PropTypes.string.isRequired,
 	selectedSite: PropTypes.object,
+	initialStep: PropTypes.string,
 };
 
 export default connect( ( state ) => ( { selectedSite: getSelectedSite( state ) } ) )(

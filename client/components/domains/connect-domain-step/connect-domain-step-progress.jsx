@@ -9,13 +9,14 @@ import classNames from 'classnames';
  * Internal dependencies
  */
 import Gridicon from 'calypso/components/gridicon';
+import { stepSlug } from 'calypso/components/domains/connect-domain-step/constants';
 
 /**
  * Style dependencies
  */
 import './style.scss';
 
-export default function ConnectDomainStepProgress( { baseClassName, steps, currentStep } ) {
+export default function ConnectDomainStepProgress( { baseClassName, steps, currentPageSlug } ) {
 	let currentStepNumber = 0;
 
 	return (
@@ -23,7 +24,7 @@ export default function ConnectDomainStepProgress( { baseClassName, steps, curre
 			{ Object.values( steps )
 				.map( ( stepName, index ) => {
 					const stepNumber = index + 1;
-					if ( stepName === steps[ currentStep ] ) {
+					if ( stepName === steps[ currentPageSlug ] ) {
 						currentStepNumber = stepNumber;
 					}
 
@@ -72,5 +73,5 @@ export default function ConnectDomainStepProgress( { baseClassName, steps, curre
 ConnectDomainStepProgress.propTypes = {
 	baseClassName: PropTypes.string.isRequired,
 	steps: PropTypes.object.isRequired,
-	currentStep: PropTypes.string.isRequired,
+	currentPageSlug: PropTypes.oneOf( Object.values( stepSlug ) ).isRequired,
 };
